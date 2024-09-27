@@ -1,0 +1,19 @@
+.container {
+    margin: 30px;
+    display: flex;
+}
+
+.element {
+    text-align: left;
+    padding: 20px;
+    margin: 0px 20px;
+}
+
+.paragraph {
+    padding: 20px 30px;
+    margin-top: 10px;
+    background-color: #1d1d1d;
+    border-radius: 15px;
+    font-weight: 300;
+    font-style: italic;
+}

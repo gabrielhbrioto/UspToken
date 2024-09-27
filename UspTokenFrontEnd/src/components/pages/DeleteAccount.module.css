@@ -1,0 +1,39 @@
+.container {
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 25vw;
+    padding-right: 25vw;
+    padding-top: 10hw;
+    padding-bottom: 10hw;
+}
+
+.form {
+    display: flex;
+}
+
+.aviso {
+    margin-top: 5vw;
+    font-size: medium;
+}
+
+.senhaIncorreta {
+    font-size: medium;
+}
+
+input[type="submit"] {
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    border: none;
+    height: 40px;
+    width: 10vw;
+    border-radius: 20px;
+    margin-top: 30px;
+    background-color: #64c4d2;;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #fcb421;
+    transition: .3s;
+}

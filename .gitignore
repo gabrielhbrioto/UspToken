@@ -1,0 +1,41 @@
+# Dependências do Node
+node_modules/
+
+# Diretórios de build
+dist/
+build/
+out/
+coverage/
+
+# Arquivos de log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Ambiente de desenvolvimento
+.env
+.env.local
+.env.*.local
+
+# Sistema de arquivos de IDEs e editores
+.idea/
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# Arquivos de cache
+.cache/
+npm-debug.log*
+yarn-error.log*
+pnp.js
+.pnp/
+
+# Diretórios de testes
+test/
+__tests__/
+*.test.js
+*.spec.js
+
+# Outros arquivos ignorados
+.DS_Store
+Thumbs.db

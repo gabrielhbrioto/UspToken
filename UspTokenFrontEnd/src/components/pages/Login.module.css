@@ -1,0 +1,82 @@
+textarea:focus, input:focus {
+    outline: none;
+}
+
+.container {
+    background-color: black;
+    width: 400px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px 30px;
+    margin-top: 10%;
+    margin-bottom: 10%;
+    border-radius: 20px;
+    text-align: center;
+}
+
+.form {
+    margin-top: 30px;
+    margin-bottom: 40px;
+}
+
+.input_container {
+    padding: 10px 10px;
+}
+
+.label, input {
+    display: block;
+    width: 100%;
+    text-align: left;
+}
+
+.label {
+    font-weight: bold;
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+.input {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 2px solid #64c4d2;
+    padding: 10px;
+    font-size: 1rem;
+    background-color: black;
+}
+
+.input:focus {
+    border-bottom: 2px solid #fcb421;
+    transition: .5s;
+}
+
+.input[type="submit"] {
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    border: none;
+    height: 40px;
+    border-radius: 20px;
+    margin-top: 30px;
+    color: white;
+    background-color: #64c4d2;
+    cursor: pointer;
+}
+
+.input[type="submit"]:hover {
+    background-color: #1094ab;
+    transition: .3s;
+}
+
+.checkBox {
+    width: 10px;
+    margin: 0px 10px; 
+}
+
+.checkBoxContainer {
+    margin-left: 0px;
+    margin-right: 0px;
+    display: flex;
+    align-content:initial;
+    padding: 10px;
+}

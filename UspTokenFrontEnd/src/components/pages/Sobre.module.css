@@ -1,0 +1,14 @@
+.container {
+    padding-left: 20vw;
+    padding-right: 20vw;
+    text-align: justify;
+}
+
+h1 {
+    text-align: center;    
+    padding: 2vw;
+}
+
+p {
+    font-size: 1.2rem;
+}

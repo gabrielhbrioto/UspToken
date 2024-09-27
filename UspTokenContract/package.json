@@ -1,0 +1,28 @@
+{
+  "name": "mintable",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "npx hardhat test",
+    "deploy": "npx hardhat run scripts/deploy.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/briotisk/mintableUSPToken.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/briotisk/mintableUSPToken/issues"
+  },
+  "homepage": "https://github.com/briotisk/mintableUSPToken#readme",
+  "devDependencies": {
+    "@nomicfoundation/hardhat-toolbox": "^4.0.0",
+    "hardhat": "^2.19.4"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.1",
+    "react-hook-form": "^7.50.1"
+  }
+}

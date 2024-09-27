@@ -1,0 +1,66 @@
+.container {
+    padding-top: 30px;
+}
+
+.contato {
+    text-align: center;
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.contato h2{
+    font-family: 'B612 Mono', monospace;
+    letter-spacing: 2px;
+}
+
+.contato p {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.contact_form {
+    margin-top: 30px;
+    margin-bottom: 40px;
+}
+
+.input_container {
+    padding: 30px 10px;
+}
+
+input, textarea{
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 2px solid #64c4d2;;
+    padding: 10px;
+    font-size: 1rem;
+    background-color: #242424;
+    width: 100%;
+    color: white;
+}
+
+textarea {
+    height: 20vh;
+}
+
+input:focus, textarea:focus {
+    border-bottom: 2px solid #fcb421;
+    outline: none;
+}
+
+input[type="submit"] {
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    border: none;
+    height: 40px;
+    border-radius: 20px;
+    margin-top: 30px;
+    background-color: #64c4d2;;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover {
+    background-color: #fcb421;
+    transition: .3s;
+}

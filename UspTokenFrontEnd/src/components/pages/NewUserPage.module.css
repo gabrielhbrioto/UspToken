@@ -1,0 +1,98 @@
+textarea:focus, input:focus {
+    outline: none;
+}
+
+.container {
+    background-color: black;
+    width: 500px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px 30px;
+    margin-top: 10%;
+    margin-bottom: 10%;
+    border-radius: 20px;
+    text-align: center;
+}
+
+.phrase {
+    margin: 20px 0px;
+    display: flex;
+    flex-wrap: wrap;
+    width: 440px;
+    justify-content: center; 
+}
+
+.word {
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 500;
+    flex: 0 0 calc(33.33% - 10px); 
+    max-width: calc(30% - 10px); 
+    margin: 5px;
+    background-color: #1d1d1d;
+    padding: 10px;
+    box-sizing: border-box;
+    border-radius: 5px;
+}
+
+.title {
+    margin: 20px 0px 30px 0px;
+    font-family: monospace;
+    font-weight: 400;
+    letter-spacing: 2px;
+}
+
+.text {
+    margin: 10px 30px;
+    text-align: left;
+    letter-spacing: 1px;
+    font-weight: 600;
+    font-size: 1.07rem;
+}
+
+.warning {
+    margin: 10px 30px;
+    font-size: .8rem;
+    text-align: left;
+}
+
+.agreement {
+    margin: 10px 10px;
+    font-size: .8rem;
+    text-align: left;
+}
+
+.checkBox {
+    width: 10px;
+}
+
+.checkBoxContainer {
+    margin-left: auto;
+    margin-right: auto;
+    display: grid;
+    grid-template-columns: 1fr auto;
+}
+
+.button {
+    padding: 0px 10px;
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: bold;
+    border: none;
+    height: 40px;
+    border-radius: 20px;
+    margin: 0px 0px 30px 0px;
+    color: white;
+    background-color: #64c4d2;
+    cursor: pointer;
+}
+
+.button:hover {
+    background-color: #1094ab;
+    transition: .3s;
+}
+
+.button:disabled {
+    opacity: 0.5; 
+    cursor: not-allowed;
+    background-color: #1d1d1d;
+}
