@@ -253,7 +253,7 @@ function NavBar() {
     return (
         <nav className={styles.navbar}>
             <Link className={styles.linkLogo} to="/">
-                <img className={styles} src={"../src/assets/logo.png"} width={60} />
+                <img className={styles} src={"../../assets/logo.png"} width={60} />
             </Link>
             <div className={styles.searchContainer}>
                 <form className={styles.form} onSubmit={registerFormhandleSubmitForm(handleSearch)}>
