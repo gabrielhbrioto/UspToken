@@ -4,6 +4,8 @@ import style from './NewUserPage.module.css'
 
 function NewUserPage() {
 
+  console.log("OIIIII");
+
     const userDataStr = localStorage.getItem('user');
     const userData = JSON.parse(userDataStr);
     const carteira = JSON.parse(userDataStr);

@@ -14,8 +14,6 @@ function SignUp() {
 
     const cadastrarUsuario = async (dados) => {
 
-        console.log(dados.mnemonico);
-
         let wallet;
         let encryptedWallet;
 
@@ -52,14 +50,13 @@ function SignUp() {
 
                 if (!response.ok) {
                     response.json().then((result) => {
-                        console.log(result);
                         alert("Erro ao cadastrar usuário: " + result.mensagem);
                         throw new Error('Erro ao realizar cadastro');
                     });
                 }
                 if (response.status === 201) { // 201: Success
 
-                    localStorage.setItem('carteira', JSON.stringify(wallet));
+                    //localStorage.setItem('carteira', JSON.stringify(wallet));
                     localStorage.setItem('user', JSON.stringify(user));
                     window.location.assign("/new-user/" + user.nusp);
 
