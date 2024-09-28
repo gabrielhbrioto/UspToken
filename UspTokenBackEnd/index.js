@@ -12,7 +12,9 @@ const jwt = require("jsonwebtoken");
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin: 'https://usp-token-dapp.vercel.app'
+}));
 
 app.use(express.json());
 
