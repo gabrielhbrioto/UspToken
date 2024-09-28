@@ -18,7 +18,7 @@ import SearchResult from './components/pages/SearchResult.jsx';
 import DeleteAccount from './components/pages/DeleteAccount.jsx';
 
 //import contractABI from "@artifacts/USPToken.sol/USPToken.json";
-import contractABI from '../UspTokenContract/artifacts/contracts/USPToken.sol/USPToken.json';
+import contractABI from '../../UspTokenContract/artifacts/contracts/USPToken.sol/USPToken.json';
 
 const provider = new ethers.JsonRpcProvider(import.meta.env.VITE_JSON_PROVIDER_URL); //URL do provedor utilizado no deploy do contrato (antes era "https://ethereum-sepolia.publicnode.com")
 const { abi: ContractABI } = contractABI;
