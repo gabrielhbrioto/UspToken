@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-const port = process.env.PORT;
+const port = process.env.PORT ?? 3000;
 const secret = process.env.SECRET;
 const expires_in = process.env.EXPIRES_IN;
 
