@@ -1,4 +1,3 @@
-import { Link } from "react-router-dom"
 import { useState } from 'react';
 
 import style from './NewUserPage.module.css'
@@ -7,7 +6,6 @@ function NewUserPage() {
 
     const userDataStr = localStorage.getItem('user');
     const userData = JSON.parse(userDataStr);
-    const carteiraStr = localStorage.getItem('carteira');
     const carteira = JSON.parse(userDataStr);
 
     const [isChecked, setIsChecked] = useState(false);
