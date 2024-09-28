@@ -16,6 +16,8 @@ app.use(cors());
 
 app.use(express.json());
 
+console.log("Starting backend...");
+
 function verifyJWT(req, res, next) {
     const token = req.headers['x-access-token'];
     jwt.verify(token, secret, async (error, decoded) => {
