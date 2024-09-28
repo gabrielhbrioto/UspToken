@@ -11,12 +11,13 @@ import Sobre from './components/pages/Sobre.jsx';
 import Contato from './components/pages/Contato.jsx';
 import Transacao from './components/pages/Transacao.jsx';
 import Login from './components/pages/Login.jsx';
-import contractABI from "../../UspTokenContract/artifacts/contracts/USPToken.sol/USPToken.json";
 import SignUp from './components/pages/SignUp.jsx';
 import UserProfile from './components/pages/UserProfile.jsx';
 import NewUserPage from './components/pages/NewUserPage.jsx';
 import SearchResult from './components/pages/SearchResult.jsx';
 import DeleteAccount from './components/pages/DeleteAccount.jsx';
+
+import contractABI from "@artifacts/USPToken.sol/USPToken.json";
 
 const provider = new ethers.JsonRpcProvider(import.meta.env.VITE_JSON_PROVIDER_URL); //URL do provedor utilizado no deploy do contrato (antes era "https://ethereum-sepolia.publicnode.com")
 const { abi: ContractABI } = contractABI;
