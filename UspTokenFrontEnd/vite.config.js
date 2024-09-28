@@ -8,5 +8,12 @@ export default defineConfig({
         alias: {
             '@artifacts': path.resolve(__dirname, '../../UspTokenContract/artifacts/contracts')
         }
+    },
+    build: {
+        rollupOptions: {
+            external: [
+                '@artifacts/USPToken.sol/USPToken.json' 
+            ]
+        }
     }
 });
