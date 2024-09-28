@@ -6,7 +6,7 @@ export default defineConfig({
     plugins: [react()],
     resolve: {
         alias: {
-            '@artifacts': path.resolve('../../UspTokenContract/artifacts/contracts')
+            '@artifacts': path.resolve('../../UspToken/UspTokenContract/artifacts/contracts')
         }
     }
 });
