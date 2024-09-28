@@ -41,7 +41,7 @@ function SignUp() {
             carteiraCriptografada: encryptedWallet,
         };
 
-        fetch('http://localhost:3000/users', {
+        fetch(import.meta.env.VITE_BASE_URL+'/users', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

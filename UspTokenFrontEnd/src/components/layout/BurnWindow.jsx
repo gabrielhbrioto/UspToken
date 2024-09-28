@@ -32,7 +32,7 @@ function BurnWindow( { provider, contract } ) {
 
     const authentication = async (data) => {
  
-        fetch('http://localhost:3000/confirm-tx', {
+        fetch(import.meta.env.VITE_BASE_URL+'/confirm-tx', {
           method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -157,7 +157,7 @@ function BurnWindow( { provider, contract } ) {
 
     const getReceiver = async (key) => {
 
-        fetch('http://localhost:3000/tx', {
+        fetch(import.meta.env.VITE_BASE_URL+'/tx', {
           method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

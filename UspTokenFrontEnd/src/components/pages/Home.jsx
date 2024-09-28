@@ -108,7 +108,7 @@ function Home( { contract } ) {
         
         async function getTotalHolders(){
 
-            fetch('http://localhost:3000/get-num-users', {
+            fetch(import.meta.env.VITE_BASE_URL+'/get-num-users', {
 
                 method: 'GET',
                     headers: {

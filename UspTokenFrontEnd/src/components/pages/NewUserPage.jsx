@@ -23,7 +23,7 @@ function NewUserPage() {
 
     const getToken = async () => {
 
-        fetch('http://localhost:3000/new-user-token', {
+        fetch(import.meta.env.VITE_BASE_URL+'/new-user-token', {
   
           method: 'POST',
               headers: {

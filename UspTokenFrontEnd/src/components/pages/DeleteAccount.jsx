@@ -16,7 +16,7 @@ function DeleteAccount() {
     async function authenticate(data) {
         console.log(data);
 
-        fetch('http://localhost:3000/confirm-tx', {
+        fetch(import.meta.env.VITE_BASE_URL+'/confirm-tx', {
             method: 'POST',
                   headers: {
                       'Content-Type': 'application/json',
@@ -65,7 +65,7 @@ function DeleteAccount() {
 
     async function deleteAccount() {
 
-        fetch('http://localhost:3000/users-delete', {
+        fetch(import.meta.env.VITE_BASE_URL+'/users-delete', {
         
             method: 'DELETE',
                 headers: {
@@ -95,7 +95,7 @@ function DeleteAccount() {
 
     async function logout() {
 
-        fetch('http://localhost:3000/logout', {
+        fetch(import.meta.env.VITE_BASE_URL+'/logout', {
         
             method: 'GET',
                 headers: {

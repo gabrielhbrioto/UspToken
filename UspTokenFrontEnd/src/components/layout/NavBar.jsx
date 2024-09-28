@@ -74,7 +74,7 @@ function NavBar() {
 
         }
 
-        const address = key = await fetch('http://localhost:3000/get-address', {
+        const address = key = await fetch(import.meta.env.VITE_BASE_URL+'/get-address', {
         
             method: 'POST',
             headers: {
@@ -168,7 +168,7 @@ function NavBar() {
         async function checkToken(){
   
             if(token) {
-                fetch('http://localhost:3000/check-token', {
+                fetch(import.meta.env.VITE_BASE_URL+'/check-token', {
         
                     method: 'GET',
                         headers: {
@@ -217,7 +217,7 @@ function NavBar() {
 
       const handleLogOut = async () => {
 
-        fetch('http://localhost:3000/logout', {
+        fetch(import.meta.env.VITE_BASE_URL+'/logout', {
         
             method: 'GET',
                 headers: {

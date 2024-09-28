@@ -11,7 +11,7 @@ import Sobre from './components/pages/Sobre.jsx';
 import Contato from './components/pages/Contato.jsx';
 import Transacao from './components/pages/Transacao.jsx';
 import Login from './components/pages/Login.jsx';
-import contractABI from "../artifacts/contracts/USPToken.sol/USPToken.json";
+import contractABI from "../../UspTokenContract/artifacts/contracts/USPToken.sol/USPToken.json";
 import SignUp from './components/pages/SignUp.jsx';
 import UserProfile from './components/pages/UserProfile.jsx';
 import NewUserPage from './components/pages/NewUserPage.jsx';

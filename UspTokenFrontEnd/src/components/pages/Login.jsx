@@ -10,7 +10,7 @@ function Login() {
 
     const verificarLogin = async (dados) => {
 
-      fetch('http://localhost:3000/login', {
+      fetch(import.meta.env.VITE_BASE_URL+'/login', {
 
         method: 'POST',
             headers: {
