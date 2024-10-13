@@ -24,6 +24,11 @@ function NavBar() {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
+    function updateLocalStorage(newData) {
+        localStorage.setItem('results', JSON.stringify(newData));
+        window.dispatchEvent(new Event('localStorageUpdated'));
+    }
+
     function normalizeToArray(key) {
 
       if (Array.isArray(key)) {
@@ -106,7 +111,8 @@ function NavBar() {
 
     async function handleSearch(data){
 
-        let results = null;
+      localStorage.removeItem('results');
+      let results = null;
         let txData = null;
         if(isNusp(data.key) || isEmail(data.key) || isName(data.key) || isEthereumAddress(data.key)) {
             
@@ -153,14 +159,14 @@ function NavBar() {
                 console.error("Erro ao buscar transação:", error);
             }
         }
-        reset();
+        // reset();
         if(txData == null){
+          updateLocalStorage(results);
           navigate("/search/"+data.key);
         }else {
           navigate(`/tx/${data.key}`, { state: txData });
         }
         
-
     }  
 
     useEffect(() => {
@@ -210,10 +216,6 @@ function NavBar() {
         checkToken();
         
       }, [token]);
-
-      /*
-       
-      */
 
       const handleLogOut = async () => {
 

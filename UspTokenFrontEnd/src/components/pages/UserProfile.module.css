@@ -1,6 +1,50 @@
 .container {
 }
 
+.addressContainer {
+    display: flex;
+    width: 33vw;
+    padding: 10px;
+}
+
+.textNotCopied {
+    font-size: 1rem;
+    background-color: #64c4d2;
+    border: none;
+    padding: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.textCopied {
+    font-size: 1rem;
+    background-color:#fcb421;
+    border: none;
+    padding: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.addressCopyClickedButton {
+    font-size: 1rem;
+    background-color:#fcb421;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.addressCopyReleasedButton {
+    font-size: 1rem;
+    background-color: #64c4d2;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
 .helloContainer {
     background-color:  #1094ab;
     text-align: left;

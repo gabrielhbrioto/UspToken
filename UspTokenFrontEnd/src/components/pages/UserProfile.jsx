@@ -5,6 +5,7 @@ import MintWindow from '../layout/MintWindow.jsx';
 import BurnWindow from '../layout/BurnWindow.jsx';
 import NavBar from '../layout/NavBar.jsx'
 import React, { useState, useEffect } from 'react';
+import { FaRegCopy } from "react-icons/fa";
 
 function UserProfile( { contract, provider } ) {
 
@@ -15,6 +16,7 @@ function UserProfile( { contract, provider } ) {
   const [receiverMint, setReceiverMint] = useState(null);
   const [receiverBurn, setReceiverBurn] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const userNameStr = sessionStorage.getItem('nome');
   const userName = JSON.parse(userNameStr);
@@ -24,6 +26,21 @@ function UserProfile( { contract, provider } ) {
 
   const ethButtonClass = !showUspCoinBalance ? style.clickedButton : style.releasedButton;
   const uspCoinButtonClass = showUspCoinBalance ? style.clickedButton : style.releasedButton;
+  const addressCopyButton = copied ? style.addressCopyClickedButton : style.addressCopyReleasedButton;
+  const addressText = copied ? style.textCopied : style.textNotCopied;
+
+  const copyText = () => {
+      const textToCopy = userAddress; 
+
+      navigator.clipboard.writeText(textToCopy)
+          .then(() => {
+              setCopied(true);
+              setTimeout(() => setCopied(false), 3000);
+          })
+          .catch(err => {
+              console.error('Falha ao copiar para a área de transferência:', err);
+          });
+  };
 
     useEffect(() => {
         
@@ -99,8 +116,12 @@ function UserProfile( { contract, provider } ) {
     return (
       <div className={style.container}>
               <div>
-              <NavBar />
+                <NavBar />
                 <div className={style.helloContainer}>
+                  <div className={style.addressContainer}>
+                    <button className={addressCopyButton} onClick={() => copyText()}><FaRegCopy /></button>
+                    <p className={addressText}>{userAddress}</p>
+                  </div>
                     <h1 className={style.helloText}>Olá, {userName.trim().match(/^[^\s]+/)}</h1>
                     <button className={uspCoinButtonClass} onClick={() => setShowUspCoinBalance(true)}>U$PT</button>
                     <button className={ethButtonClass} onClick={() => setShowUspCoinBalance(false)}>ETH</button>
