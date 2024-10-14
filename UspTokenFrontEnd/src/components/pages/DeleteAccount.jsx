@@ -14,7 +14,6 @@ function DeleteAccount() {
     }
 
     async function authenticate(data) {
-        console.log(data);
 
         fetch(import.meta.env.VITE_BASE_URL+'/confirm-tx', {
             method: 'POST',
@@ -43,13 +42,11 @@ function DeleteAccount() {
           })
           .then( async (dados) => {
 
-            console.log(dados);
-      
             if(dados.auth) 
                 setCorrectPassword(true);
       
             else 
-            setCorrectPassword(false);
+                setCorrectPassword(false);
             
       
           })
@@ -130,8 +127,6 @@ function DeleteAccount() {
         
         if(correctPassword) {
 
-            setCorrectPassword(true);
-
             await deleteAccount();
             await logout();
 
@@ -142,7 +137,6 @@ function DeleteAccount() {
 
         }else {
 
-            setCorrectPassword(false);
             reset();
 
         }

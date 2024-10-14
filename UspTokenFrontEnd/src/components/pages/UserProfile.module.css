@@ -3,7 +3,7 @@
 
 .addressContainer {
     display: flex;
-    width: 33vw;
+    width: 100%;
     padding: 10px;
     justify-content: center; 
 }
