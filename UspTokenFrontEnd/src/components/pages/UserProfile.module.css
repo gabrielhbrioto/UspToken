@@ -5,10 +5,11 @@
     display: flex;
     width: 33vw;
     padding: 10px;
+    justify-content: center; 
 }
 
 .textNotCopied {
-    font-size: 1rem;
+    font-size: .8rem;
     background-color: #64c4d2;
     border: none;
     padding: 10px;
@@ -17,7 +18,8 @@
 }
 
 .textCopied {
-    font-size: 1rem;
+    font-size: .8rem;
+    font-size: rem;
     background-color:#fcb421;
     border: none;
     padding: 10px;
@@ -26,7 +28,7 @@
 }
 
 .addressCopyClickedButton {
-    font-size: 1rem;
+    font-size: .8rem;
     background-color:#fcb421;
     border: none;
     padding: 10px;
@@ -36,7 +38,7 @@
 }
 
 .addressCopyReleasedButton {
-    font-size: 1rem;
+    font-size: .8rem;
     background-color: #64c4d2;
     border: none;
     padding: 10px;
