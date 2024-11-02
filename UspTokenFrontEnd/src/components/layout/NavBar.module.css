@@ -47,17 +47,15 @@
 }
 
 .button {
-    border: none;
-    border-radius: 10px;
-    padding: 0.75em;
-    margin: 1em;
-    background-color: #1094ab;
+    background: none; /* Remove o fundo */
+    border: none; /* Remove a borda */
+    padding: 0; /* Remove o padding */
+    font: inherit;
     cursor: pointer;
 }
 
 .button:hover {
-    background-color: #64c4d2;
-    transition: .3s;
+    color: #fcb421;
 }
 
 .searchIconButton {
@@ -105,4 +103,64 @@
     margin: 0;
     width: 100%;
     height: 45px;
+}
+
+.menuIcon {
+    cursor: pointer;
+    margin-top: auto;
+    margin-bottom: auto;
+    color: #64c4d2;
+}
+
+.sideMenu {
+    position: fixed;
+    right: -250px;
+    top: 0;
+    width: 250px;
+    height: 100%;
+    background-color:#1d1d1d;
+    box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
+    transition: right 0.3s;
+    z-index: 1000;
+}
+
+.sideMenu.open {
+    right: 0;
+}
+
+.closeButton {
+    color: white;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+
+.list {
+    list-style: none;
+    padding-top: 70px;
+    padding-left: 20px;
+    padding-right: 20px;
+    display: flex-start; /* Adiciona flexbox */
+    flex-direction: column; /* Exibe os itens em coluna */
+    align-items: center; /* Centraliza os itens horizontalmente */
+    height: 100%; /* Garante que a lista ocupe a altura total do menu */
+}
+
+.list a{
+    margin: 10px;
+    text-decoration: none; /* Remove o sublinhado dos links */
+    color: inherit;
+}
+
+.list li{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.list a:hover{
+    color: #fcb421;
 }
