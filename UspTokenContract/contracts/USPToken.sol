@@ -24,6 +24,7 @@ contract USPToken is IERC20 {
 
     mapping(address => uint256) public balances;
     mapping(address => mapping(address => uint256)) public allowed;
+    mapping(address => uint256) public totalAllowances;
 
     //construtor
     constructor(){
@@ -84,14 +85,19 @@ contract USPToken is IERC20 {
 
     }
 
-    //confere a aprovação de uma transação
-    function approve(address delegate, uint256 amount) public override enoughBalance(msg.sender, amount) returns(bool){
+    function approve(address delegate, uint256 amount) public override returns (bool) {
+        // Verifica se a nova soma total das allowances não excede o saldo do usuário
+        uint256 currentAllowance = allowed[msg.sender][delegate];
+        uint256 newTotalAllowances = totalAllowances[msg.sender] - currentAllowance + amount;
 
-        //registra a quantia aprovada no vetor allowed e emite um evento
+        require(newTotalAllowances <= balances[msg.sender], "ERRO: Soma total das allowances excede o saldo!");
+
+        // Atualiza a soma total das allowances e registra a nova allowance
+        totalAllowances[msg.sender] = newTotalAllowances;
         allowed[msg.sender][delegate] = amount;
+
         emit Approval(msg.sender, delegate, amount);
         return true;
-
     }
 
     //verifica a quantia aprovada para a transação dados o endereço de origem e o endereço autorizado a efetuar a transação
@@ -112,25 +118,6 @@ contract USPToken is IERC20 {
         emit Transfer(origin, msg.sender, amount);
         return true;
 
-    }
-
-    //aumenta a quantia que um endereço de terceiros está autorizada a transacionar de sua própria conta
-    function increaseAllowance(address spender, uint256 addedValue) public isValidAddress(spender) returns (bool) {
-
-        //soma à antiga quantia o acréscimo do valor permissionado e emite um evento com o valore atualizado
-        allowed[msg.sender][spender] += addedValue;
-        emit Approval(msg.sender, spender, allowed[msg.sender][spender]);
-        return true;
-
-    }
-    
-    //diminui a quantia que um endereço de terceiros está autorizada a transacionar de sua própria conta
-    function decreaseAllowance(address spender, uint256 subtractedValue) public isValidAddress(spender) returns (bool) {
-
-        //subtrai da antiga quantia o acréscimo do valor permissionado e emite um evento com o valore atualizado
-        allowed[msg.sender][spender] -= subtractedValue;
-        emit Approval(msg.sender, spender, allowed[msg.sender][spender]);
-        return true;
     }
 
     //cria uma dada quantia de tokens e os destina a um dado endereço 
