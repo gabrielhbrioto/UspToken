@@ -4,6 +4,7 @@ import TransactionWindow from '../layout/TransactionWindow.jsx';
 import MintWindow from '../layout/MintWindow.jsx';
 import BurnWindow from '../layout/BurnWindow.jsx';
 import NavBar from '../layout/NavBar.jsx'
+import ApproveWindow from '../layout/ApproveWindow.jsx';
 import React, { useState, useEffect } from 'react';
 import { FaRegCopy } from "react-icons/fa";
 
@@ -13,6 +14,7 @@ function UserProfile( { contract, provider } ) {
   const [ethBalance, setEthBalance] = useState(null);
   const [showUspCoinBalance, setShowUspCoinBalance] = useState(true);
   const [receiverTx, setReceiverTx] = useState(null);
+  const [receiverTransferFrom, setReceiverTransferFrom] = useState(null);
   const [receiverMint, setReceiverMint] = useState(null);
   const [receiverBurn, setReceiverBurn] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
@@ -135,6 +137,8 @@ function UserProfile( { contract, provider } ) {
 
                 <TransactionWindow uspCoinBalance={uspCoinBalance} receiver={receiverTx} provider={provider} contract={contract} />
 
+                <ApproveWindow uspCoinBalance={uspCoinBalance} receiver={receiverTransferFrom} provider={provider} contract={contract} />
+                
                 {isOwner &&(
                   <MintWindow receiver={receiverMint} provider={provider} contract={contract} />
                 )}
