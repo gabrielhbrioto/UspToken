@@ -14,7 +14,6 @@ function ApproveWindow( { uspCoinBalance, provider, contract } ) {
     const [validReceiver, setValidReceiver] = useState(true);
     const [correctPassword, setCorrectPassword] = useState(true);
     const [enoughBalance, setEnoughBalance] = useState(false);
-    const [receiverBalance, setReceiverBalance] = useState(false);
     const [receiverNotFound, setReceiverNotFound] = useState(false);
     const [approveStep, setApproveStep] = useState(1);
     const [approveAmount, setApproveAmount] = useState(null);
@@ -147,8 +146,6 @@ function ApproveWindow( { uspCoinBalance, provider, contract } ) {
     
     function handleChange(event) {
 
-      console.log(enoughBalance);
-      
         if(Number(event.target.value) > uspCoinBalance || uspCoinBalance == 0 || Number(event.target.value) < 0)  {
           setEnoughBalance(false);
         }else {
@@ -205,11 +202,6 @@ function ApproveWindow( { uspCoinBalance, provider, contract } ) {
                 setReceiverNotFound(false);
                 setApproveStep(2);
 
-                //consultar saldo do receiver pra ver se a quantidade que estou digitando é maior que aquele saldo
-                const balance = await contract.balanceOf(receiver.enderecoEthereum);
-                const numericBalance = parseFloat(ethers.formatEther(balance));  
-                setReceiverBalance(numericBalance);
-    
               }else {
     
                 setValidReceiver(false);

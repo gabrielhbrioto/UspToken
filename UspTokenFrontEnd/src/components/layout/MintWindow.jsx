@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { Contract, ethers } from 'ethers';
 import {fetchTx, decryptWallet} from '../../utils/utilities.js';
 
-function MintWindow( { provider, contract, setReceipt } ) {
+function MintWindow( { provider, contract } ) {
 
     const { register: registerForm1, handleSubmit: handleSubmitForm1, reset: reset1} = useForm();
     const { register: registerForm2, handleSubmit: handleSubmitForm2, reset: reset2} = useForm();

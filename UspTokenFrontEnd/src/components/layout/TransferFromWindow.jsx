@@ -6,19 +6,20 @@ import { useState } from 'react';
 import { Contract, ethers } from 'ethers';
 import {fetchTx, decryptWallet} from '../../utils/utilities.js';
 
-function BurnWindow( { provider, contract } ) {
+function TransferFromWindow( { provider, contract } ) {
 
     const { register: registerForm1, handleSubmit: handleSubmitForm1, reset: reset1} = useForm();
     const { register: registerForm2, handleSubmit: handleSubmitForm2, reset: reset2} = useForm();
     const { register: registerForm3, handleSubmit: handleSubmitForm3, reset: reset3} = useForm();
-    const [validReceiver, setValidReceiver] = useState(true);
+    const [validReceiver, setValidSender] = useState(true);
     const [correctPassword, setCorrectPassword] = useState(true);
     const [enoughBalance, setEnoughBalance] = useState(false);
-    const [receiverBalance, setReceiverBalance] = useState(false);
-    const [receiverNotFound, setReceiverNotFound] = useState(false);
+    const [senderBalance, setSenderBalance] = useState(false);
+    const [allowance, setAllowance] = useState(false);
+    const [senderNotFound, setSenderNotFound] = useState(false);
     const [transferFromStep, setTransferFromStep] = useState(1);
     const [transferFromAmount, setTransferFromAmount] = useState(null);
-    const [receiver, setReceiver] = useState(null);
+    const [sender, setSender] = useState(null);
     const [transaction, setTransaction] = useState(null);
 
     const tokenStr = sessionStorage.getItem('token');
@@ -77,7 +78,7 @@ function BurnWindow( { provider, contract } ) {
                 const newContract = contract.connect(signer);
       
                 //envia a transação
-                const tx = await newContract.burn(receiver.enderecoEthereum, ethers.parseEther(transferFromAmount));
+                const tx = await newContract.transferFrom(sender.enderecoEthereum, ethers.parseEther(transferFromAmount));
                 const receipt = await tx.wait();
                 if(receipt.status == 1) {
 
@@ -127,10 +128,10 @@ function BurnWindow( { provider, contract } ) {
       
     }
 
-    function resetBurn() {
+    function resetTranferFrom() {
 
         setTransferFromStep(1);
-        setReceiver(null);
+        setSender(null);
         setTransferFromAmount(null);
         reset1();
         reset2();
@@ -138,7 +139,7 @@ function BurnWindow( { provider, contract } ) {
     
     }
     
-    function setBurnParams(data) {
+    function setTransferFromParams(data) {
 
         setTransferFromAmount(data.value);
         setTransferFromStep(3);
@@ -147,7 +148,7 @@ function BurnWindow( { provider, contract } ) {
     
     function handleChange(event) {
       
-        if(Number(event.target.value) > receiverBalance || event.target.value <= 0 || !event.target.value)  {
+        if(Number(event.target.value) > senderBalance || event.target.value <= 0 || !event.target.value || event.target.value > allowance)  {
           setEnoughBalance(false);
         }else {
           setEnoughBalance(true);
@@ -155,7 +156,7 @@ function BurnWindow( { provider, contract } ) {
         
     }
 
-    const getReceiver = async (key) => {
+    const getSender = async (key) => {
 
         fetch(import.meta.env.VITE_BASE_URL+'/tx', {
           method: 'POST',
@@ -189,35 +190,39 @@ function BurnWindow( { provider, contract } ) {
             })
             .then(async (dados) => {
     
-              const receiver = {
+              const sender = {
     
                 nome: dados.nome,
                 enderecoEthereum: dados.endereco_ethereum
     
               };
     
-              if(receiver.enderecoEthereum) {
+              if(sender.enderecoEthereum) {
     
-                setReceiver(receiver);
-                setValidReceiver(true);
-                setReceiverNotFound(false);
+                setSender(sender);
+                setValidSender(true);
+                setSenderNotFound(false);
                 setTransferFromStep(2);
 
-                //consultar saldo do receiver pra ver se a quantidade que estou digitando é maior que aquele saldo
-                const balance = await contract.balanceOf(receiver.enderecoEthereum);
+                //consultar saldo do sender pra ver se a quantidade que estou digitando é maior que aquele saldo
+                const balance = await contract.balanceOf(sender.enderecoEthereum);
                 const numericBalance = parseFloat(ethers.formatEther(balance));  
-                setReceiverBalance(numericBalance);
+                setSenderBalance(numericBalance);
+
+                const userAllowance = await contract.allowance(sender.enderecoEthereum, userAddress);
+                const numericAllowance = parseFloat(ethers.formatEther(userAllowance));  
+                setAllowance(numericAllowance);
     
               }else {
     
-                setValidReceiver(false);
+                setValidSender(false);
     
               }
     
             })
               .catch(error => {
     
-                setReceiverNotFound(true);
+                setSenderNotFound(true);
                 console.error('Ocorreu um erro:', error);
                 reset1();
     
@@ -231,12 +236,12 @@ function BurnWindow( { provider, contract } ) {
                   transferFromStep === 1 &&(
                   
                     <div className={style.txContainer}>
-                      <h2 className={style.txText}>Queimar Tokens</h2>
-                      <form className={style.form} onSubmit={handleSubmitForm1(getReceiver)}>
-                        <label className={style.label} htmlFor="keyburn">De qual conta deseja queimar os tokens?</label>
-                        <input className={style.input} id="keyburn" {...registerForm1("key")} placeholder="E-mail / Nusp / Endereço Ethereum"/>
+                      <h2 className={style.txText}>Tranferir Tokens de Terceiros</h2>
+                      <form className={style.form} onSubmit={handleSubmitForm1(getSender)}>
+                        <label className={style.label} htmlFor="keytransferfrom">De qual conta deseja transferir os tokens?</label>
+                        <input className={style.input} id="keytransferfrom" {...registerForm1("key")} placeholder="E-mail / Nusp / Endereço Ethereum"/>
                         {
-                          receiverNotFound &&(
+                          senderNotFound &&(
                             <p>*Destinatário não encontrado</p>
                           )
                         }
@@ -256,10 +261,11 @@ function BurnWindow( { provider, contract } ) {
                   
                     <div className={style.txContainer}>
                       <button className={style.backIconButton} onClick={() => setTransferFromStep(1)}><IoArrowBackCircleSharp className={style.backIcon}/></button>
-                      <h2 className={style.txText}>Queimar Tokens</h2>
-                      <form className={style.form} onSubmit={handleSubmitForm2(setBurnParams)} onChange={handleChange}>
-                        <label className={style.label} htmlFor="value">Quanto tokens deseja queimar?</label>
+                      <h2 className={style.txText}>Tranferir Tokens de Terceiros</h2>
+                      <form className={style.form} onSubmit={handleSubmitForm2(setTransferFromParams)} onChange={handleChange}>
+                        <label className={style.label} htmlFor="value">Quanto tokens deseja tranferir?</label>
                         <input className={style.input} type="number" step={0.01} id="value" {...registerForm2("value")} placeholder="Digite o Valor" autoComplete="off"/>
+                        <p>Saldo disponível: {senderBalance < allowance ? senderBalance : allowance}</p>
                         <input className={style.input} type="submit" value="Continuar" disabled={!enoughBalance}/>
                       </form>
                     </div>
@@ -271,8 +277,8 @@ function BurnWindow( { provider, contract } ) {
                     <div className={style.txContainer}>
                       <button className={style.backIconButton} onClick={() => setTransferFromStep(2)}><IoArrowBackCircleSharp className={style.backIcon}/></button>
                       <h2 className={style.txText}>Revisar Operação</h2>
-                      <p>Queimar da conta de {receiver.nome}?</p>
-                      <p>Endereço: {receiver.enderecoEthereum.substring(0,6)+ '...' + receiver.enderecoEthereum.substring(receiver.enderecoEthereum.length-4)}</p>
+                      <p>Tranferir da conta de {sender.nome}?</p>
+                      <p>Endereço: {sender.enderecoEthereum.substring(0,6)+ '...' + sender.enderecoEthereum.substring(sender.enderecoEthereum.length-4)}</p>
                       <p>Quantia: {transferFromAmount} U$PT</p>
                       <form className={style.form} onSubmit={handleSubmitForm3(authentication)}>
                         <label className={style.label} htmlFor="senha">Insira sua senha para confirmar a operação:</label>
@@ -304,7 +310,7 @@ function BurnWindow( { provider, contract } ) {
                       <div className={style.txContainer}>
                       <h2 className={style.txText}>Operação concluída ✔</h2>
                       <p>Valor {transferFromAmount} U$PT</p>
-                      <p>Usuário: {receiver.nome}</p>
+                      <p>Usuário: {sender.nome}</p>
                       {transaction ? (
                         <div>
                         <Link to={"/tx/" + transaction.hash} state={{
@@ -324,7 +330,7 @@ function BurnWindow( { provider, contract } ) {
                         <p>Carregando detalhes da transação...</p>
                       )}
                       <br></br>
-                      <button className={style.button} onClick={resetBurn}>Nova Operação</button>
+                      <button className={style.button} onClick={resetTranferFrom}>Nova Operação</button>
                     </div>
                   
                 )}
@@ -335,7 +341,7 @@ function BurnWindow( { provider, contract } ) {
                     <div className={style.txContainer}>
                       <h2 className={style.txText}>A operação falhou = (</h2>
                       <p>Verifique se você possui Ether suficiente para realizar a transação e tente novamente.</p>
-                      <button className={style.button} onClick={resetBurn}>Nova Operação</button>
+                      <button className={style.button} onClick={resetTranferFrom}>Nova Operação</button>
                     </div>
                   
                 )}
@@ -345,4 +351,4 @@ function BurnWindow( { provider, contract } ) {
     )
 }
 
-export default BurnWindow
+export default TransferFromWindow
