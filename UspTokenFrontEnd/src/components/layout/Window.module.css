@@ -2,16 +2,6 @@
     padding: 10px 30px;
 }
 
-.helloContainer {
-    background-color:  #1094ab;
-    text-align: left;
-    width: 33vw;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 20px;
-    /**border-radius: 15px;*/
-}
-
 .helloText {
     padding: 20px;
 }
@@ -53,7 +43,11 @@
 
 .txContainer {
     background-color: #1d1d1d;
-    width: 33vw;
+    /* width: 33vw; */
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 30%;
+    padding-right: 30%;
     height: 75vh;
     margin-left: auto;
     margin-right: auto;
@@ -61,7 +55,7 @@
     /**border-radius: 15px;*/
     justify-content: center;
     align-items: center;
-    padding: 20px 0px;
+    /* padding: 20px 0px; */
 }
 
 .backIconButton {
@@ -132,6 +126,8 @@
 }
 
 .input[type="submit"] {
+    display: inline-block; 
+    padding: 10px 20px;
     text-align: center;
     text-transform: uppercase;
     font-weight: bold;
@@ -142,6 +138,7 @@
     color: white;
     background-color: #64c4d2;
     cursor: pointer;
+    min-width: 150px;
 }
 
 .input[type="submit"]:hover {

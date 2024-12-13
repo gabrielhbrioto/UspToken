@@ -11,6 +11,7 @@ import { FaRegCopy } from "react-icons/fa";
 
 function UserProfile( { contract, provider } ) {
 
+  const [activeTab, setActiveTab] = useState('Transaction');
   const [uspCoinBalance, setUspCoinBalance] = useState(null);
   const [ethBalance, setEthBalance] = useState(null);
   const [showUspCoinBalance, setShowUspCoinBalance] = useState(true);
@@ -21,6 +22,18 @@ function UserProfile( { contract, provider } ) {
   const [receiverBurn, setReceiverBurn] = useState(null);
   const [isOwner, setIsOwner] = useState(false);
   const [copied, setCopied] = useState(false);
+
+  const tabs = [
+    { name: 'Transaction', title: 'Transação', component: <TransactionWindow uspCoinBalance={uspCoinBalance} receiver={receiverTx} provider={provider} contract={contract} /> },
+    { name: 'Approve', title: 'Aprovar', component: <ApproveWindow uspCoinBalance={uspCoinBalance} receiver={receiverApprove} provider={provider} contract={contract} /> },
+    { name: 'TransferFrom', title: 'Transferir de', component: <TransferFromWindow sender={senderTransferFrom} provider={provider} contract={contract} /> },
+    ...(isOwner ? [
+      { name: 'Mint', title: 'Mintar', component: <MintWindow receiver={receiverMint} provider={provider} contract={contract} /> },
+      { name: 'Burn', title: 'Queimar', component: <BurnWindow uspCoinBalance={uspCoinBalance} receiver={receiverBurn} provider={provider} contract={contract} /> }
+    ] : []),
+  ];
+  
+  
 
   const userNameStr = sessionStorage.getItem('nome');
   const userName = JSON.parse(userNameStr);
@@ -119,40 +132,59 @@ function UserProfile( { contract, provider } ) {
 
     return (
       <div className={style.container}>
-              <div>
-                <NavBar />
-                <div className={style.helloContainer}>
-                  <div className={style.addressContainer}>
-                    <button className={addressCopyButton} onClick={() => copyText()}><FaRegCopy /></button>
-                    <p className={addressText}>{userAddress}</p>
-                  </div>
-                    <h1 className={style.helloText}>Olá, {userName.trim().match(/^[^\s]+/)}</h1>
-                    <button className={uspCoinButtonClass} onClick={() => setShowUspCoinBalance(true)}>U$PT</button>
-                    <button className={ethButtonClass} onClick={() => setShowUspCoinBalance(false)}>ETH</button>
-                    {
-                      showUspCoinBalance ? 
-                      <p className={style.balance}>{uspCoinBalance} U$PT</p> 
-                      : 
-                      <p className={style.balance}>{ethBalance} ETH</p>
-                    }
-                </div>
-
-                <TransactionWindow uspCoinBalance={uspCoinBalance} receiver={receiverTx} provider={provider} contract={contract} />
-
-                <ApproveWindow uspCoinBalance={uspCoinBalance} receiver={receiverApprove} provider={provider} contract={contract} />
-                
-                <TransferFromWindow sender={senderTransferFrom} provider={provider} contract={contract} />
-                
-                {isOwner &&(
-                  <MintWindow receiver={receiverMint} provider={provider} contract={contract} />
-                )}
-
-                {isOwner &&(
-                  <BurnWindow uspCoinBalance={uspCoinBalance} receiver={receiverBurn} provider={provider} contract={contract} />
-                )}
-              </div>
+          <NavBar />
+          <div className={style.helloContainer}>
+            <div className={style.addressContainer}>
+              <button className={addressCopyButton} onClick={() => copyText()}>
+                <FaRegCopy />
+              </button>
+              <p className={addressText}>{userAddress}</p>
+            </div>
+            <h1 className={style.helloText}>Olá, {userName.trim().match(/^[^\s]+/)}</h1>
+            <div className={style.buttonContainer}>
+              <button className={uspCoinButtonClass} onClick={() => setShowUspCoinBalance(true)}>
+                U$PT
+              </button>
+              <button className={ethButtonClass} onClick={() => setShowUspCoinBalance(false)}>
+                ETH
+              </button>
+            </div>
+            {showUspCoinBalance ? (
+              <p className={style.balance}>{uspCoinBalance} U$PT</p>
+            ) : (
+              <p className={style.balance}>{ethBalance} ETH</p>
+            )}
+          </div>
+          
+          {/* Barra de navegação de abas */}
+          <div className={style.tabs}>
+            {tabs.map((tab, index) => {
+              const isActive = tab.name === activeTab;
+              const isLeft = tabs[index + 1]?.name === activeTab;
+              const isRight = tabs[index - 1]?.name === activeTab;
+            
+              return (
+                <button
+                  key={tab.name}
+                  className={`${style.tab} 
+                    ${isActive ? style.activeTab : ""} 
+                    ${isLeft ? style.leftTab : ""} 
+                    ${isRight ? style.rightTab : ""}`}
+                  onClick={() => setActiveTab(tab.name)}
+                >
+                  {tab.title}
+                </button>
+              );
+            })}
+          </div>
+          
+          {/* Conteúdo da aba ativa */}
+          <div className={style.tabContent}>
+            {tabs.find((tab) => tab.name === activeTab)?.component}
+          </div>
       </div>
-    )
+    );
+    
 }
 
 export default UserProfile
