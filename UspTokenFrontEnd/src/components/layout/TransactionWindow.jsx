@@ -33,11 +33,12 @@ function TransactionWindow( { uspCoinBalance, provider, contract } ) {
 
         fetch(import.meta.env.VITE_BASE_URL+'/confirm-tx', {
           method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-access-token': token
-                },
-                body: JSON.stringify(data),
+          credentials: "include",
+          headers: {
+              'Content-Type': 'application/json',
+              'x-access-token': token
+          },
+          body: JSON.stringify(data),
         })
         .then(response => {
     
@@ -158,11 +159,12 @@ function TransactionWindow( { uspCoinBalance, provider, contract } ) {
 
         fetch(import.meta.env.VITE_BASE_URL+'/tx', {
           method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-access-token': token
-                },
-                body: JSON.stringify(key),
+          credentials: "include",
+          headers: {
+              'Content-Type': 'application/json',
+              'x-access-token': token
+          },
+          body: JSON.stringify(key),
         })    
             .then(response => {
     
@@ -267,7 +269,7 @@ function TransactionWindow( { uspCoinBalance, provider, contract } ) {
                   transactionStep === 3 &&(
                     <div className={style.txContainer}>
                       <button className={style.backIconButton} onClick={() => setTransactionStep(2)}><IoArrowBackCircleSharp className={style.backIcon}/></button>
-                      <h2 className={style.txText}>Revisar Transaferência</h2>
+                      <h2 className={style.txText}>Revisar Transferência</h2>
                       <p>Transferir para {receiver.nome}?</p>
                       <p>Endereço: {receiver.enderecoEthereum.substring(0,6)+ '...' + receiver.enderecoEthereum.substring(receiver.enderecoEthereum.length-4)}</p>
                       <p>Quantia: {txAmount} U$PT</p>

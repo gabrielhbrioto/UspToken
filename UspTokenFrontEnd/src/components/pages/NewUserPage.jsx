@@ -24,10 +24,11 @@ function NewUserPage() {
         fetch(import.meta.env.VITE_BASE_URL+'/new-user-token', {
   
           method: 'POST',
-              headers: {
-                  'Content-Type': 'application/json',
-              },
-              body: JSON.stringify(userData),
+          credentials: "include", // Envia e recebe cookies
+          headers: {
+              'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(userData),
         })    
             .then(response => {
   

@@ -16,12 +16,13 @@ function DeleteAccount() {
     async function authenticate(data) {
 
         fetch(import.meta.env.VITE_BASE_URL+'/confirm-tx', {
-            method: 'POST',
-                  headers: {
-                      'Content-Type': 'application/json',
-                      'x-access-token': token
-                  },
-                  body: JSON.stringify(data),
+          method: 'POST',
+          credentials: "include",
+          headers: {
+              'Content-Type': 'application/json',
+              'x-access-token': token
+          },
+          body: JSON.stringify(data),
           })
           .then(response => {
       

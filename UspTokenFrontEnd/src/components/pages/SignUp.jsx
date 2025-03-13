@@ -41,6 +41,7 @@ function SignUp() {
 
         fetch(import.meta.env.VITE_BASE_URL+'/users', {
             method: 'POST',
+            credentials: "include",
             headers: {
                 'Content-Type': 'application/json',
             },

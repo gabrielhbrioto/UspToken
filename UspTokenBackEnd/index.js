@@ -1,37 +1,54 @@
 require("dotenv").config();
 
 const port = process.env.PORT ?? 3000;
-const secret = process.env.SECRET;
-const expires_in = process.env.EXPIRES_IN;
+const JWTsecret = process.env.SECRET;
+const JWTexpiresIn = process.env.EXPIRES_IN;
+const refreshTokenSecret = process.env.REFRESH_TOKEN_SECRET;
+const refreshTokenExpiresIn = process.env.REFRESH_TOKEN_EXPIRES_IN;
 
 const db = require("./db");
 const express = require("express");
 const cors = require("cors");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const cookieParser = require('cookie-parser');
 
 const app = express();
-
-app.use(cors());
-
 app.use(express.json());
+app.use(cookieParser());
+
+app.use(cors({
+    origin: process.env.CORS_ORIGIN, // Usa o valor definido no .env
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-access-token'] 
+}));
 
 console.log("Starting backend...");
 
+function generateAccessToken(nusp) {
+    return jwt.sign({nusp: nusp}, JWTsecret, { expiresIn: JWTexpiresIn });
+}
+
+function generateRefreshToken(nusp) {
+    return jwt.sign({nusp: nusp}, refreshTokenSecret, { expiresIn: refreshTokenExpiresIn });
+}
+
 function verifyJWT(req, res, next) {
-    const token = req.headers['x-access-token'];
-    jwt.verify(token, secret, async (error, decoded) => {
-        if(error) {
-            return res.status(401).end();
+    const accessToken = req.headers['x-access-token'];
+
+    if (!accessToken) {
+        return res.status(401).json({ message: "Token de acesso ausente!" });
+    }
+
+    jwt.verify(accessToken, JWTsecret, (error, decoded) => {
+        if (error) {
+            console.error("Erro ao verificar o token:", error.message);
+            return res.status(401).json({ message: "Token inválido ou expirado!" });
         }
 
-        const isInBlacklist = await db.inBlacklist(token);
-        if(isInBlacklist) {
-            return res.status(401).end();
-        }
-        req.nusp = decoded.nusp
         next();
-    })
+    });
 }
 
 app.get("/check-token", verifyJWT, async (req, res) => {
@@ -67,8 +84,18 @@ app.get("/get-num-users", async (req, res) => {
 
 app.post("/new-user-token", async (req, res) => {
     
-    const token = jwt.sign({nusp: req.body.nusp}, secret, {expiresIn: expires_in});
-    res.status(200).json({auth: true, token});
+    const accessToken = generateAccessToken(req.body.nusp);
+    const refreshToken = generateRefreshToken(req.body.nusp);
+    
+    // Definir o refresh token no cookie HTTP-only
+    res.cookie("refreshToken", refreshToken, {
+        httpOnly: true, // Impede acesso via JavaScript (protege contra XSS)
+        secure: process.env.NODE_ENV === "production", // Somente HTTPS em produção
+        sameSite: "Strict", // Impede envio do cookie em requisições de sites externos
+        maxAge: refreshTokenExpiresIn // Expira em 7 dias
+    });
+
+    res.status(200).json({auth: true, token: accessToken});
 
 });
 
@@ -77,33 +104,66 @@ app.post("/login", async (req, res) => {
         const userData = await db.getUserData(req.body.key);
 
         if (!userData) {
-            // Se nenhum dado foi encontrado, envie uma resposta com status 404
-            res.status(401).json({ message: "Falha na autenticação" });
-        }else {
-            bcrypt.compare(req.body.senha, userData.senha, async (error, result) => {
-                if(error || !result) {
-                    res.status(401).json({ message: "Falha na autenticação" });
-                }
-                if(result) {
-                    const token = jwt.sign({nusp: userData.nusp}, secret, {expiresIn: expires_in});
-                    res.status(200).json({auth: true, token, nome: userData.nome, nusp: userData.nusp, endereco_ethereum: userData.endereco_ethereum, carteira: userData.carteira});
-                }           
-            });
+            return res.status(401).json({ message: "Falha na autenticação" });
         }
+
+        bcrypt.compare(req.body.senha, userData.senha, async (error, result) => {
+            if (error || !result) {
+                return res.status(401).json({ message: "Falha na autenticação" });
+            }
+
+            if (result) {
+                const accessToken = generateAccessToken(userData.nusp);
+                const refreshToken = generateRefreshToken(userData.nusp);
+
+                // 🔹 Define o Refresh Token como um cookie HTTP-only
+                res.cookie("refreshToken", refreshToken, {
+                    httpOnly: true,   // Impede acesso via JavaScript (proteção contra XSS)
+                    secure: process.env.SECURE, // Somente HTTPS em produção
+                    sameSite: process.env.SAME_SITE, // Evita envio de cookies para sites terceiros (proteção contra CSRF)
+                    maxAge: refreshTokenExpiresIn // Expira em 7 dias
+                });
+
+                // 🔹 Retorna apenas o access token no JSON (refresh token fica no cookie)
+                res.status(200).json({
+                    auth: true,
+                    token: accessToken,
+                    nome: userData.nome,
+                    nusp: userData.nusp,
+                    endereco_ethereum: userData.endereco_ethereum,
+                    carteira: userData.carteira
+                });
+            }
+        });
     } catch (error) {
         console.error("Erro ao buscar dados de login:", error);
         res.status(500).send("Erro ao buscar dados de login"); // Retorna um erro 500 em caso de falha
     }
 });
 
+app.post("/refresh-token", (req, res) => {
+
+    const refreshToken = req.cookies.refreshToken;
+
+    if (!refreshToken) return res.status(401).json({ error: "Refresh token ausente" });
+
+    jwt.verify(refreshToken, REFRESH_SECRET, (err, user) => {
+        if (err || db.refreshTokenExists(refreshToken) !== refreshToken) return res.status(403).json({ error: "Token inválido" });
+
+        const newAccessToken = generateAccessToken(user);
+        res.json({ token: newAccessToken });
+    });
+});
+
 app.get("/logout", verifyJWT, async (req, res) => {
 
-    const token = req.headers['x-access-token'];
+    //const refreshToken = req.headers['x-refresh-token'];
+    const refreshToken = req.cookies.refreshToken;
 
     try {
 
-        const decoded = jwt.decode(token);
-        const resInsercao = await db.insertBlacklist(token, decoded.exp);
+        const decoded = jwt.decode(refreshToken);
+        const resInsercao = await db.insertBlacklist(refreshToken, decoded.exp);
         if(!resInsercao) {
             res.status(401).json({ message: "Falha ao processar logout!" });
         }
@@ -208,8 +268,9 @@ app.post("/users", async (req, res) => {
 
 app.delete("/users-delete", verifyJWT, async (req, res) => {
 
-    const token = req.headers['x-access-token'];
-    const decoded = jwt.decode(token);
+    //const refreshToken = req.headers['x-refresh-token'];
+    const refreshToken = req.cookies.refreshToken;
+    const decoded = jwt.decode(refreshToken);
 
     try {
         // Tenta deletar o usuário do banco de dados

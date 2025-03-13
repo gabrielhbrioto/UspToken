@@ -33,11 +33,12 @@ function MintWindow( { provider, contract } ) {
  
         fetch(import.meta.env.VITE_BASE_URL+'/confirm-tx', {
           method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-access-token': token
-                },
-                body: JSON.stringify(data),
+          credentials: "include",
+          headers: {
+              'Content-Type': 'application/json',
+              'x-access-token': token
+          },
+          body: JSON.stringify(data),
         })
         .then(response => {
     
@@ -157,11 +158,12 @@ function MintWindow( { provider, contract } ) {
 
         fetch(import.meta.env.VITE_BASE_URL+'/tx', {
           method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-access-token': token
-                },
-                body: JSON.stringify(key),
+          credentials: "include",
+          headers: {
+              'Content-Type': 'application/json',
+              'x-access-token': token
+          },
+          body: JSON.stringify(key),
         })    
             .then(response => {
     

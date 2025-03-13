@@ -69,6 +69,7 @@ function NavBar() {
 
         const address = key = await fetch(import.meta.env.VITE_BASE_URL + '/get-address', {
             method: 'POST',
+            credentials: "include",
             headers: {
                 'Content-Type': 'application/json',
                 'x-access-token': token
@@ -180,6 +181,7 @@ function NavBar() {
                     });
             } else {
                 setLogged(false);
+
             }
         }
         checkToken();
@@ -188,6 +190,7 @@ function NavBar() {
     const handleLogOut = async () => {
         fetch(import.meta.env.VITE_BASE_URL + '/logout', {
             method: 'GET',
+            credentials: "include",
             headers: {
                 'Content-Type': 'application/json',
                 'x-access-token': token
@@ -209,7 +212,7 @@ function NavBar() {
 
         sessionStorage.clear();
         alert("Logout realizado com sucesso!");
-        await delay(1000);
+        //await delay(1000000);
         window.location.assign("/");
     };
 
@@ -240,6 +243,8 @@ function NavBar() {
                           <hr></hr>
                           <li><Link to="/signup">Sign In</Link></li>
                           <hr></hr>
+                          <li><Link to="/">Home</Link></li>
+                          <hr></hr>
                       </>
                   ) : (
                       <>
@@ -248,6 +253,8 @@ function NavBar() {
                           <li><Link to="/profile">Minha Página</Link></li>
                           <hr></hr>
                           <li><Link to="/delete-account">Excluir Conta</Link></li>
+                          <hr></hr>
+                          <li><Link to="/">Home</Link></li>
                           <hr></hr>
                       </>
                   )}

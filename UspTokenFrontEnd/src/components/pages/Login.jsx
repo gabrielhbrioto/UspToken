@@ -13,10 +13,11 @@ function Login() {
       fetch(import.meta.env.VITE_BASE_URL+'/login', {
 
         method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(dados),
+        credentials: "include",
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(dados),
       })    
           .then(response => {
 

@@ -34,11 +34,12 @@ function BurnWindow( { provider, contract } ) {
  
         fetch(import.meta.env.VITE_BASE_URL+'/confirm-tx', {
           method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'x-access-token': token
-                },
-                body: JSON.stringify(data),
+          credentials: "include",
+          headers: {
+              'Content-Type': 'application/json',
+              'x-access-token': token
+          },
+          body: JSON.stringify(data),
         })
         .then(response => {
     
