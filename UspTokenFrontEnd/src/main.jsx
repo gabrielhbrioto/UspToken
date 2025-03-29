@@ -5,7 +5,8 @@ import { ethers } from 'ethers';
 import './index.css';
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { SearchProvider } from './components/layout/SearchContext.jsx'; 
+import { SearchProvider } from './components/context/SearchContext.jsx'; 
+import { AuthProvider } from "./components/context/AuthContext.jsx"
 import Home from './components/pages/Home.jsx';
 import Sobre from './components/pages/Sobre.jsx';
 import Contato from './components/pages/Contato.jsx';
@@ -75,8 +76,10 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <SearchProvider>
-      <RouterProvider router={router} />
-    </SearchProvider>
+    <AuthProvider>
+      <SearchProvider>
+        <RouterProvider router={router} />
+      </SearchProvider>
+    </AuthProvider>
   </React.StrictMode>,
 )

@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { IoArrowBackCircleSharp } from "react-icons/io5";
 import { useState } from 'react';
-import { Contract, ethers } from 'ethers';
+import { AuthContext } from "../context/AuthContext";
 import {fetchTx, decryptWallet} from '../../utils/utilities.js';
 
 function ApproveWindow( { uspCoinBalance, provider, contract } ) {

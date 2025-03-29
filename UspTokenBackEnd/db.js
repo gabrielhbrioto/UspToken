@@ -41,38 +41,6 @@ async function insertRefreshTokenList(token, expires_in) {
 
 }
 
-async function refreshTokenExists(token) {
-
-    const client = await connect();
-    const query = 'SELECT 1 FROM REFRESH_TOKEN WHERE TOKEN = $1 LIMIT 1';
-    const values = [token];
-
-    const res = await client.query(query, values);
-
-    if (client) client.release();
-
-    return res.rowCount > 0; // Retorna true se encontrar, false se não encontrar
-
-}
-
-async function removeRefreshTokenList(token) {
-
-    const client = await connect();
-
-    try {
-        const query = 'DELETE FROM REFRESH_TOKEN WHERE TOKEN = $1';
-        const values = [token];
-        const res = await client.query(query, values);
-    } catch (err) {
-        console.error(err);
-        return false;
-    } finally {
-        if (client) client.release();
-    }
-    return true;
-
-}
-
 async function insertBlacklist(token, expires_in) {
 
     const client = await connect();
@@ -276,8 +244,6 @@ setInterval(deleteExpiredRows, 1000 * 60 * 60 * 24); // a cada 24 hrs
 
 module.exports = {
     insertRefreshTokenList,
-    refreshTokenExists,
-    removeRefreshTokenList,
     insertBlacklist,
     inBlacklist,
     insertUser,

@@ -141,23 +141,32 @@ app.post("/login", async (req, res) => {
     }
 });
 
-app.post("/refresh-token", (req, res) => {
-
-    const refreshToken = req.cookies.refreshToken;
+app.post("/refresh-token", async (req, res) => {
+    const refreshToken = req.cookies.refreshToken; // Obtém o refresh token do cookie
 
     if (!refreshToken) return res.status(401).json({ error: "Refresh token ausente" });
 
-    jwt.verify(refreshToken, REFRESH_SECRET, (err, user) => {
-        if (err || db.refreshTokenExists(refreshToken) !== refreshToken) return res.status(403).json({ error: "Token inválido" });
+    try {
+        const user = jwt.verify(refreshToken, refreshTokenSecret);
 
-        const newAccessToken = generateAccessToken(user);
+        // Verifica se o refresh token existe no banco
+        const inBlacklist = await db.inBlacklist(refreshToken);
+        if (inBlacklist) {
+            return res.status(403).json({ error: "Token inválido" });
+        }
+
+        // Gera um novo token de acesso
+        const newAccessToken = generateAccessToken(user.nusp);
         res.json({ token: newAccessToken });
-    });
+
+    } catch (err) {
+        console.error("Erro ao validar refresh token:", err.message);
+        return res.status(403).json({ error: "Token inválido" });
+    }
 });
 
 app.get("/logout", verifyJWT, async (req, res) => {
 
-    //const refreshToken = req.headers['x-refresh-token'];
     const refreshToken = req.cookies.refreshToken;
 
     try {
@@ -179,7 +188,9 @@ app.get("/logout", verifyJWT, async (req, res) => {
 app.post("/confirm-tx", verifyJWT, async (req, res) => {
     try {
 
-        const userData = await db.getUserPassword(req.nusp);
+        const jwtToken = req.headers['x-access-token'];
+        const decoded = jwt.decode(jwtToken);
+        const userData = await db.getUserPassword(decoded.nusp);
 
         if (!userData) {
             res.status(401).json({ auth: false });

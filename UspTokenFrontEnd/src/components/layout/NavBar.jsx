@@ -1,9 +1,9 @@
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { IoSearchSharp, IoMenu } from "react-icons/io5";
-import { SearchContext } from "./SearchContext";
-import { useContext } from 'react';
+import { SearchContext } from "../context/SearchContext.jsx";
+import { AuthContext } from "../context/AuthContext.jsx";
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useRef } from "react";
 
@@ -12,6 +12,7 @@ import { isEthereumAddress, isName, isNusp, isEmail, isTxHash, fetchTx, fetchTxB
 
 function NavBar() {
 
+    const { fetchWithAuth } = useContext(AuthContext);
     const location = useLocation();
     const navigate = useNavigate();
     const menuRef = useRef();
@@ -22,10 +23,6 @@ function NavBar() {
 
     const tokenStr = sessionStorage.getItem('token');
     const token = JSON.parse(tokenStr);
-
-    function delay(ms) {
-        return new Promise(resolve => setTimeout(resolve, ms));
-    }
 
     function updateLocalStorage(newData) {
         localStorage.setItem('results', JSON.stringify(newData));
@@ -156,29 +153,30 @@ function NavBar() {
     useEffect(() => {
         async function checkToken() {
             if (token) {
-                fetch(import.meta.env.VITE_BASE_URL + '/check-token', {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'x-access-token': token
-                    },
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error('Erro ao carregar os dados');
-                        }
-                        if (response.status !== 204) {
-                            return response.json();
-                        }
-                        return null;
+
+                try {
+
+                    
+                    const response = await fetchWithAuth(import.meta.env.VITE_BASE_URL + '/check-token', {
+                        method: 'GET',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'x-access-token': token
+                        },
                     })
-                    .then(data => {
-                        setLogged(JSON.stringify(data.validToken));
-                    })
-                    .catch(error => {
-                        setLogged(false);
-                        console.error('Ocorreu um erro:', error);
-                    });
+
+                    if(!response.ok || response.status == 204) {
+                        throw new Error('Erro ao carregar os dados');
+                    }
+    
+                    const data = response.json();
+                    setLogged(data.validToken);
+
+                }catch (error) {
+                    setLogged(false);
+                    console.error("Erro:", error);
+                }
+                
             } else {
                 setLogged(false);
 
