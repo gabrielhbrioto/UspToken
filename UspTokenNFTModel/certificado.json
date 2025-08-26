@@ -1,0 +1,27 @@
+{
+  "name": "Certificado de Conclusão - Gabriel Brioto",
+  "description": "Certificado digital emitido em NFT para Gabriel Brioto pela conclusão de 2 horas de atividades complementares",
+  "image": "ipfs://bafybeib4pgkjkfsqqncoqx3gqghksiaz3lrp2t6pkolth3ukpxljrp2kli",
+  "attributes": [
+    {
+      "trait_type": "Aluno",
+      "value": "Gabriel Brioto"
+    },
+    {
+      "trait_type": "Curso",
+      "value": "Blockchain Fundamentals"
+    },
+    {
+      "trait_type": "Instituição",
+      "value": "ICMC - USP"
+    },
+    {
+      "trait_type": "Data de Conclusão",
+      "value": "2025-08-25"
+    },
+    {
+      "trait_type": "ID do Certificado",
+      "value": "NFT-2025-001"
+    }
+  ]
+}
